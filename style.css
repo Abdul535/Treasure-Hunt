@@ -1,0 +1,34 @@
+body {
+  background-color: black;
+  color: aquamarine;
+}
+
+table {
+  border: 2px solid aquamarine;
+  margin: 5px;
+}
+td {
+  border: 1px solid aquamarine;
+  height: 55px;
+  width: 55px;
+  font-size: x-large;
+  text-align: center;
+}
+
+.footer {
+  margin-top: 55vh;
+  margin-left: 45vw;
+}
+.footer > a{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    padding: 15px;
+}
+
+@media only screen and (max-width: 600px) {
+  td {
+    height: 30px;
+    width: 30px;
+    font-size: large;
+  }
+}

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Treasure Hunt Game</title>
+  </head>
+  <body>
+    <center>
+      <div>
+        <h1>Treasure Game</h1>
+        <h1>Welcome <span id="player-name"></span></h1>
+        <h1>Attempts : <span id="attempts"></span></h1>
+      </div>
+      <div>
+        <table id="my-game"></table>
+      </div>
+    </center>
+  </body>
+  <script>
+
+    if (!localStorage.getItem("winners")) {
+      localStorage.setItem("winners", JSON.stringify([]));
+      console.log(localStorage.getItem("winners"));
+    }
+    let attempt = 0;
+    // let finalarr=[];
+    // let temp;
+    const audio = new Audio("audio.mp3");
+    const winner = new Audio("winner.mp3");
+    const loser = new Audio("loser.mp3");
+    function main() {
+      // Input Take Username
+      let username = prompt("Enter your Name");
+      console.log(username);
+      while (!username) {
+        username = prompt("Username Cannot Be Empty, Please Try Again");
+      }
+
+      // Access ID from Player-name and Display there
+      document.getElementById("player-name").innerText = username;
+
+      //Generate TableData from 1 to 100
+      const tableData = [];
+
+      for (let i = 1; i <= 100; i++) {
+        //Push Elements 1 to 100
+        tableData.push(i);
+      }
+      console.log(tableData);
+      tableData.sort(() => Math.random() - 0.5);
+
+      //Access Table Tag
+      let table = document.getElementById("my-game");
+      let row,
+        col,
+        counter = 0;
+      let primesArray = [2, 3, 5, 7];
+      let visitedElements = [];
+      for (let i = 1; i <= 10; i++) {
+        // Generate Row Tags <tr>
+        row = document.createElement("tr");
+        for (let j = 1; j <= 10; j++) {
+          //Generate <td> Tags
+          col = document.createElement("td");
+
+          //Assign ID From Counter
+          col.id = tableData[counter];
+
+          //Add Inner Text from Table Data
+          // col.innerText = tableData[counter];
+
+          col.addEventListener("click", function (event) {
+            // console.log(event.target.id);
+            let clickedNumber = event.target.id;
+            console.log(clickedNumber);
+            if (clickedNumber == 1) {
+              winner.play();
+              alert("You are a Winner, Congratulations!!!!");
+
+              // let temp = {
+              //   playername: username,
+              //   attempts: attempt
+              // }
+
+              // console.log("temp",temp);
+              // console.log("Final arr",finalarr);
+              // localStorage.getItem("winners");
+              // finalarr =[...finalarr, temp];
+
+              let data = {playerName:username,attempts:attempt};
+
+              let winners = JSON.parse(localStorage.getItem("winners"));
+
+              // let final = [data];
+              winners.push(data);
+
+              localStorage.setItem("winners", JSON.stringify(winners));
+
+              return location.replace("leaderboard.html");
+            } 
+            else if (primesArray.includes(+clickedNumber)) {
+              loser.play();
+              alert("You are Loser! Better Luck Next Time");
+
+
+              location.reload("/");
+            } else if (visitedElements.includes(+clickedNumber)) {
+              alert("The Block is Already Selected");
+            } else {
+              for (let i = +clickedNumber; i <= 100; i++) {
+                if (i % +clickedNumber == 0) {
+                  document.getElementById(i).style.backgroundColor =
+                    "aquamarine";
+                  visitedElements.push(i);
+                }
+              }
+              attempt++;
+              audio.play();
+            }
+            document.getElementById("attempts").innerText = attempt;
+
+            // console.log(username);
+            // console.log(attempt);
+
+          });
+
+          //Append the td Tag to the Row
+          row.appendChild(col);
+
+          //Incement Count
+          counter++;
+        }
+
+        //Append the Whole row to Table
+        table.appendChild(row);
+      }
+    }
+
+    //Invoke the Function
+    main();
+  </script>
+</html>

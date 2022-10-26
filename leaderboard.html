@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        body {
+            margin-top: 3%;
+            background-color: #141414;
+            color: #61dafb;
+            padding: 20px;
+        }
+
+        table {
+            border: 4px solid #61dafb;
+            margin-top: 5px;
+        }
+
+        td {
+            border: 2px solid #61dafb;
+            height: 55px;
+            width: 155px;
+            text-align: center;
+            font-size: larger;
+            font-weight: 500;
+        }
+
+        thead {
+            border: 2px solid #61dafb;
+            color: black;
+            font-size: large;
+            font-weight: 800;
+            height: 55px;
+            width: 155px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        h1 {
+            color: palegreen;
+        }
+    </style>
+</head>
+
+<body>
+
+    <center>
+        <h1>Treasure Hunt Leader Board</h1>
+        <center>
+            <table id="leaderboard">
+                <thead>
+                    <th> Rank</th>
+                    <th>Attempts</th>
+                    <th>Player Names</th>
+                </thead>
+                <tbody id="leaderboard-body">
+                </tbody>
+            </table>
+        </center>
+        </center>
+</body>
+<script>
+
+    let leaderboardarray = [];
+    // winners.sort((a, b) => {
+    //     return a.attempts - b.attempts;
+    // })
+    // winners[0].rank = 1;
+
+    // for (let i = 1; i < winners.length; i++) {
+    //     if (winners[i].attempts == winners[i - 1].attempts) { winners[i].rank = winners[i - 1].rank }
+    //     else { winners[i].rank = winners[i - 1].rank + 1; }
+    // }
+    // let rank1 = winners.filter((ele) => ele.rank == 1);
+    // let rank2 = winners.filter((ele) => ele.rank == 2);
+    // let rank3 = winners.filter((ele) => ele.rank == 3);
+
+   
+    // leaderboardarray.push(rank1, rank2, rank3);
+
+//---------------------------------------------------------------------
+let winnerData = [
+    [
+        { playerName: "Elon", attempts: 4 },
+        { playerName: "Vishnu", attempts: 4 },
+        { playerName: "Vishwesh", attempts: 4 }
+    ],
+    [
+        { playerName: "Prash", attempts: 3 },
+        { playerName: "Saad", attempts: 3 },
+        { playerName: "Adnan", attempts: 3 },
+        { playerName: "Musk", attempts: 3 }
+    ],
+    [
+        { playerName: "Cenfu", attempts: 1 },
+    ],
+    [
+        { playerName: "abc", attempts: 2 },
+        { playerName: "kpi", attempts: 2 },
+        { playerName: "qwerty", attempts: 2 },
+        { playerName: "poi", attempts: 2 },
+    ],
+    [
+        { playerName: "sd", attempts: 8 },
+        { playerName: "sdf", attempts: 8 },
+        { playerName: "qwesdfrty", attempts: 8 },
+        { playerName: "sdfsdf", attempts: 8 },
+    ],
+    [
+        { playerName: "Huda", attempts: 5 },
+        { playerName: "Rahmath", attempts: 5 }
+    ],
+    [
+        { playerName: "Majid", attempts: 6 }
+    ],
+    [
+        { playerName: "Ateeq", attempts: 1 }
+    ]
+];
+
+// let newPlayer = localStorage.getItem(JSON.parse("winners"));
+// console.log("First Data",winnerData);
+
+let winners = JSON.parse(localStorage.getItem("winners"));
+console.log(winners)
+console.log(winners[0].playerName);
+
+winnerData.push(winners);
+
+let newWinners = [];
+let temp = [];
+
+
+// console.log(winnerData);//2D Array
+winnerData = winnerData.flat();
+
+winnerData.sort((a, b) => a.attempts - b.attempts);
+
+temp[0] = winnerData[0];
+let i;
+for (i = 1; i < winnerData.length; i++) {
+    if (winnerData[i].attempts == winnerData[i - 1].attempts) {
+        temp.push(winnerData[i]);
+    } else {
+        newWinners.push(temp);
+        temp = [];
+        temp.push(winnerData[i]);
+    }
+}
+temp.push(winnerData[i]);
+
+console.log(newWinners);
+
+
+    // --------------------------DOM BUILDING
+    let table = document.getElementById("leaderboard-body");
+    let row, column, str = "",count=1,attcount=0;
+    for (let i = 0; i < 3; i++) {
+        row = document.createElement("tr");
+        for (let j = 0; j < 3; j++) {
+            column = document.createElement("td");
+            if (j == 0) {
+                // column.innerText = leaderboardarray[i][0].rank;
+                // if (newWinners[i][0].rank == undefined) column.innerText = "--";
+                column.innerText = i+1;
+            }
+            if (j == 1) {
+                if (newWinners[i][0].attempts == undefined) column.innerText = "--";
+
+                column.innerText = newWinners[i][0].attempts;
+                attcount++;
+
+            }
+            if (j == 2) {
+                if (newWinners[i][0].playerName == undefined) column.innerText = "--";
+                str = "";
+                newWinners[i].forEach(element => {
+
+                    console.log("My elements are",element.playerName, typeof element.playerName)
+                    str += element.playerName;
+                    column.innerText = str;
+                    str += " , "
+                });
+                console.log(str)
+            }
+            row.appendChild(column);
+        }
+        table.appendChild(row);
+    }
+</script>
+
+</html>
